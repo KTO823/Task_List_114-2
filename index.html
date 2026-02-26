@@ -9,26 +9,33 @@
     <style>
         body { font-family: 'Noto Sans TC', sans-serif; background-color: #fcfaf7; color: #444; letter-spacing: 0.02em; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background-color: #f0f0f0; border: 1px solid #f0f0f0; }
-        .calendar-day { background-color: #fff; min-height: 95px; padding: 8px; font-size: 0.85rem; position: relative; }
+        .calendar-day { background-color: #fff; min-height: 85px; padding: 6px; font-size: 0.8rem; position: relative; }
         .holiday { background-color: #fff1f1; color: #d64545; }
         .weekend { background-color: #fff8f8; color: #d64545; }
-        .exam-day { background-color: #f1f5ff; color: #3b82f6; }
+        .exam-day { background-color: #eef2ff; color: #316cf4; border: 1px solid #dbeafe; }
         .empty-day { background-color: #fafafa; }
-        .task-item-container { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-        .task-checkbox { width: 16px; height: 16px; border: 1px solid #d1d5db; border-radius: 50%; cursor: pointer; flex-shrink: 0; position: relative; }
+        
+        .task-item-container { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; padding: 4px 0; }
+        .task-checkbox { width: 18px; height: 18px; border: 1px solid #d1d5db; border-radius: 50%; cursor: pointer; flex-shrink: 0; position: relative; }
         .task-checkbox.checked { background-color: #9ca3af; border-color: #9ca3af; }
-        .task-checkbox.checked::after { content: ''; position: absolute; left: 5px; top: 2px; width: 4px; height: 8px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); }
-        .task-text { outline: none; border-bottom: 1px solid transparent; width: 100%; }
+        .task-checkbox.checked::after { content: ''; position: absolute; left: 6px; top: 3px; width: 4px; height: 8px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+        .task-text { outline: none; border-bottom: 1px solid transparent; width: 100%; font-size: 0.9rem; }
         .task-text:focus { border-bottom: 1px dashed #3b82f6; }
         .task-done { opacity: 0.3; text-decoration: line-through; }
-        .row-finished { background-color: #f9f9f9 !important; opacity: 0.5; filter: grayscale(1); }
+        
+        .week-block { border-bottom: 1px solid #f0f0f0; padding: 16px 0; }
+        .week-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+        .week-badge { background: #444; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 500; }
+        .date-range { color: #999; font-size: 0.75rem; font-weight: 300; }
+        
+        .row-finished { opacity: 0.5; filter: grayscale(1); }
         .tab-btn { border-bottom: 2px solid transparent; transition: all 0.3s; padding-bottom: 8px; }
         .tab-active { border-bottom: 2px solid #444; color: #000; font-weight: 500; }
-        table { width: 100%; }
-        th { border-bottom: 1px solid #444; font-weight: 500; padding: 12px; font-size: 0.75rem; color: #999; text-transform: uppercase; letter-spacing: 0.1em; text-align: left; }
-        td { border-bottom: 1px solid #f0f0f0; padding: 14px 12px; vertical-align: top; }
-        .btn-add { font-size: 0.75rem; color: #aaa; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
-        .work-slot-card { border-left: 1px solid #e5e7eb; padding-left: 1rem; margin-bottom: 1.5rem; }
+        
+        .btn-add { font-size: 0.75rem; color: #aaa; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; border: 1px dashed #ddd; border-radius: 4px; }
+        
+        /* 工讀表單美化 */
+        .work-slot-card { border-left: 2px solid #e5e7eb; padding-left: 1rem; margin-bottom: 1.5rem; }
         .time-label { font-size: 0.7rem; color: #9ca3af; margin-bottom: 0.25rem; display: block; letter-spacing: 0.1em; }
         .work-subject { font-size: 0.95rem; color: #4b5563; }
         .work-location { font-size: 0.75rem; color: #9ca3af; margin-right: 0.5rem; }
@@ -36,61 +43,80 @@
 </head>
 <body class="p-4 md:p-12">
 
-    <div class="max-w-5xl mx-auto">
-        <header class="mb-10 border-b border-gray-200 pb-6 flex justify-between items-end">
+    <div class="max-w-3xl mx-auto">
+        <header class="mb-8 border-b border-gray-200 pb-6 flex justify-between items-end">
             <div>
                 <h1 class="text-2xl font-light tracking-widest text-gray-900">李柏毅的學期計畫表</h1>
             </div>
             <div class="flex gap-4">
-                <button onclick="saveAll()" class="text-xs border border-gray-400 px-4 py-1 hover:bg-gray-900 hover:text-white transition">儲存內容</button>
-                <button onclick="resetData()" class="text-xs text-gray-400 hover:text-red-400">重置</button>
+                <button onclick="saveAll()" class="text-xs border border-gray-400 px-4 py-1 hover:bg-gray-900 hover:text-white transition">儲存修改</button>
+                <button onclick="resetData()" class="text-xs text-gray-300 hover:text-red-400">重置</button>
             </div>
         </header>
 
-        <nav class="flex gap-6 mb-10 text-sm tracking-widest overflow-x-auto pb-2">
+        <nav class="flex gap-6 mb-8 text-sm tracking-widest overflow-x-auto pb-2 scrollbar-hide">
             <button onclick="switchTab('jp')" id="btn-jp" class="tab-btn tab-active whitespace-nowrap">🇯🇵 日文課</button>
             <button onclick="switchTab('en')" id="btn-en" class="tab-btn whitespace-nowrap">🇺🇸 英文課</button>
             <button onclick="switchTab('work')" id="btn-work" class="tab-btn whitespace-nowrap">🏫 工讀排班</button>
             <button onclick="switchTab('all')" id="btn-all" class="tab-btn whitespace-nowrap">🗓️ 互動月曆</button>
         </nav>
 
-        <div id="msg" class="fixed top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-4 py-2 rounded opacity-0 transition-opacity pointer-events-none z-50 shadow-lg">已儲存至本地</div>
+        <div id="msg" class="fixed top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-4 py-2 rounded opacity-0 transition-opacity pointer-events-none z-50 shadow-lg">進度已儲存</div>
 
+        <!-- 日文分頁 -->
         <section id="tab-jp" class="tab-content block">
-            <div class="bg-white border border-gray-100 shadow-sm rounded-sm">
-                <table>
-                    <thead><tr><th class="w-16 pl-6">週次</th><th class="w-24">日期範圍</th><th>予定任務</th></tr></thead>
-                    <tbody id="jp-body"></tbody>
-                </table>
-                <div class="p-4 bg-gray-50/50"><button onclick="addRow('jp')" class="btn-add">+ 新增週次</button></div>
+            <div class="bg-white border border-gray-100 shadow-sm rounded-sm p-4 md:p-6" id="jp-container">
+                <!-- 資料將由 JS 生成 -->
             </div>
+            <button onclick="addRow('jp')" class="btn-add mt-6 w-full justify-center">+ 新增週次</button>
         </section>
 
+        <!-- 英文分頁 -->
         <section id="tab-en" class="tab-content hidden">
-            <div class="bg-white border border-gray-100 shadow-sm rounded-sm">
-                <table>
-                    <thead><tr><th class="w-16 pl-6">週次</th><th class="w-24">日期範圍</th><th>任務與考試</th></tr></thead>
-                    <tbody id="en-body"></tbody>
-                </table>
-                <div class="p-4 bg-gray-50/50"><button onclick="addRow('en')" class="btn-add">+ 新增週次</button></div>
+            <div class="bg-white border border-gray-100 shadow-sm rounded-sm p-4 md:p-6" id="en-container">
+                <!-- 資料將由 JS 生成 -->
             </div>
+            <button onclick="addRow('en')" class="btn-add mt-6 w-full justify-center">+ 新增週次</button>
         </section>
 
+        <!-- 工讀分頁 -->
         <section id="tab-work" class="tab-content hidden">
-            <div class="bg-white border border-gray-100 shadow-sm rounded-sm p-8 md:p-12">
-                <div class="text-center mb-12"><h2 class="text-sm tracking-[0.4em] text-gray-400 font-light mb-2 uppercase">Study Assistant Schedule</h2></div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                    <div><h3 class="text-xs font-bold tracking-widest border-b border-gray-900 pb-2 mb-6">MONDAY</h3><div class="work-slot-card"><span class="time-label">12:15-13:15</span><span class="work-subject"><span class="work-location">5108</span>日文②</span></div><div class="work-slot-card"><span class="time-label">17:30-18:30</span><span class="work-subject"><span class="work-location">5108</span>日文②</span></div><div class="work-slot-card"><span class="time-label">18:35-19:35</span><span class="work-subject"><span class="work-location">5108</span>日文②</span></div></div>
-                    <div><h3 class="text-xs font-bold tracking-widest border-b border-gray-900 pb-2 mb-6">WEDNESDAY</h3><div class="work-slot-card"><span class="time-label">12:15-13:15</span><span class="work-subject"><span class="work-location">5108</span>日文②</span></div><div class="work-slot-card"><span class="time-label">17:30-18:30</span><span class="work-subject"><span class="work-location">5108</span>日文②</span></div><div class="work-slot-card"><span class="time-label">18:35-19:35</span><span class="work-subject"><span class="work-location">5108</span>日文②</span></div></div>
-                    <div><h3 class="text-xs font-bold tracking-widest border-b border-gray-900 pb-2 mb-6 text-indigo-400">THURSDAY</h3><div class="work-slot-card border-indigo-100"><span class="time-label">12:15-13:15</span><span class="work-subject"><span class="work-location">5108</span>日文②</span></div></div>
+            <div class="bg-white border border-gray-100 shadow-sm rounded-sm p-6 md:p-12">
+                <div class="text-center mb-10"><h2 class="text-sm tracking-[0.4em] text-gray-400 font-light mb-2 uppercase">Study Assistant</h2></div>
+                <div class="space-y-10">
+                    <div>
+                        <h3 class="text-xs font-bold tracking-widest border-b border-gray-900 pb-2 mb-6">MONDAY 週一</h3>
+                        <div class="work-slot-card"><span class="time-label">12:15-13:15</span><span class="work-subject"><span class="work-location">5108</span>日文②</span></div>
+                        <div class="work-slot-card"><span class="time-label">17:30-18:30</span><span class="work-subject"><span class="work-location">5108</span>日文②</span></div>
+                        <div class="work-slot-card"><span class="time-label">18:35-19:35</span><span class="work-subject"><span class="work-location">5108</span>日文②</span></div>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold tracking-widest border-b border-gray-900 pb-2 mb-6">WEDNESDAY 週三</h3>
+                        <div class="work-slot-card"><span class="time-label">12:15-13:15</span><span class="work-subject"><span class="work-location">5108</span>日文②</span></div>
+                        <div class="work-slot-card"><span class="time-label">17:30-18:30</span><span class="work-subject"><span class="work-location">5108</span>日文②</span></div>
+                        <div class="work-slot-card"><span class="time-label">18:35-19:35</span><span class="work-subject"><span class="work-location">5108</span>日文②</span></div>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold tracking-widest border-b border-gray-900 pb-2 mb-6 text-blue-500">THURSDAY 週四</h3>
+                        <div class="work-slot-card border-blue-100"><span class="time-label">12:15-13:15</span><span class="work-subject"><span class="work-location">5108</span>日文②</span></div>
+                    </div>
                 </div>
             </div>
         </section>
 
+        <!-- 月曆分頁 -->
         <section id="tab-all" class="tab-content hidden">
-            <div class="bg-white border border-gray-100 shadow-sm p-8 rounded-sm">
-                <div class="flex items-center justify-between mb-8"><button onclick="changeMonth(-1)" class="text-gray-400">← PREV</button><h2 id="calendar-title" class="text-xl font-light tracking-[0.3em]"></h2><button onclick="changeMonth(1)" class="text-gray-400">NEXT →</button></div>
+            <div class="bg-white border border-gray-100 shadow-sm p-6 rounded-sm">
+                <div class="flex items-center justify-between mb-6">
+                    <button onclick="changeMonth(-1)" class="text-gray-400 p-2">←</button>
+                    <h2 id="calendar-title" class="text-lg font-light tracking-[0.2em]"></h2>
+                    <button onclick="changeMonth(1)" class="text-gray-400 p-2">→</button>
+                </div>
                 <div class="calendar-grid" id="calendar-grid"></div>
+                <div class="mt-6 flex flex-wrap gap-4 text-[10px] text-gray-400 uppercase tracking-widest border-t pt-4">
+                    <div class="flex items-center gap-2"><span class="w-3 h-3 bg-red-50 rounded-sm"></span> 假日/週末</div>
+                    <div class="flex items-center gap-2"><span class="w-3 h-3 bg-indigo-50 border border-indigo-100 rounded-sm"></span> 考試週</div>
+                </div>
             </div>
         </section>
     </div>
@@ -100,21 +126,16 @@
             jp: [
                 { w: "1", d: "2/23-3/01", tasks: ["冬休み宿題 発表", "エッセイ 01"], status: [false, false] },
                 { w: "2", d: "3/02-3/08", tasks: ["PHPのエッセイ(日本人價值觀)", "エッセイ 02"], status: [false, false] },
-                { w: "3", d: "3/09-3/15", tasks: ["模擬訪談 pivot 01", "小測試エッセイ 01-02"], status: [false, false] },
+                { w: "3", d: "3/09-3/15", tasks: ["模擬訪談 pivot 01", "小テストエッセイ 01-02"], status: [false, false] },
                 { w: "4", d: "3/16-3/22", tasks: ["數據閱讀 01 (GDP/新NISA/Mobility)"], status: [false] },
                 { w: "5", d: "3/23-3/29", tasks: ["數據閱讀 02 (皇室/就職)"], status: [false] },
-                { w: "6", d: "3/30-4/05", tasks: ["4/1 調課", "4/2 休假"], status: [false, false] },
+                { w: "6", d: "3/30-4/05", tasks: ["4/1 調課", "4/2 校慶休假"], status: [false, false] },
                 { w: "7", d: "4/06-4/12", tasks: ["模擬訪談 pivot 02"], status: [false] },
                 { w: "8", d: "4/13-4/19", tasks: ["數據閱讀 03 (價值觀/生活)"], status: [false] },
                 { w: "9", d: "4/20-4/26", tasks: ["期中考週：數據閱讀 04 (戰後80年)"], status: [false] },
-                { w: "10", d: "4/27-5/03", tasks: ["模擬討論會 01"], status: [false] },
-                { w: "11", d: "5/04-5/10", tasks: ["模擬討論會 02"], status: [false] },
-                { w: "12", d: "5/11-5/17", tasks: ["模擬討論會 03"], status: [false] },
-                { w: "13", d: "5/18-5/24", tasks: ["行動經濟學 01 (予定)"], status: [false] },
-                { w: "14", d: "5/25-5/31", tasks: ["行動經濟學 02 (予定)"], status: [false] },
-                { w: "15", d: "6/01-6/07", tasks: ["行動經濟學 03 (予定)"], status: [false] },
-                { w: "16", d: "6/08-6/14", tasks: ["行動經濟學 04 (予定)"], status: [false] },
-                { w: "17", d: "6/15-6/21", tasks: ["校外教學成果發表 (3組)"], status: [false] },
+                { w: "10-12", d: "4/27-5/17", tasks: ["模擬討論會 01-03"], status: [false] },
+                { w: "13-16", d: "5/18-6/14", tasks: ["行動經濟學 01-04"], status: [false] },
+                { w: "17", d: "6/15-6/21", tasks: ["校外教學成果發表"], status: [false] },
                 { w: "18", d: "6/22-6/28", tasks: ["期末：自主學習發表"], status: [false] }
             ],
             en: [
@@ -134,33 +155,35 @@
                 { w: "14", d: "5/25-5/31", tasks: ["5/28 Part 6 短文填空", "EasyTest 第 34 回 (2%)"], status: [false, false] },
                 { w: "15", d: "6/01-6/07", tasks: ["6/04 Part 7 閱讀測驗", "課堂小考 7 (Part 6)"], status: [false, false] },
                 { w: "16", d: "6/08-6/14", tasks: ["6/11 Part 7 閱讀測驗", "課堂小考 8 (Part 7)"], status: [false, false] },
-                { w: "17", d: "6/15-6/21", tasks: ["6/18 Part 7 閱讀測驗", "小考 9(P7), 小考 10(P5~7 Review)"], status: [false, false] },
-                { w: "18", d: "6/22-6/28", tasks: ["6/25 期末考", "Rosetta Stone 加分項目截止"], status: [false, false] }
+                { w: "17", d: "6/15-6/21", tasks: ["6/18 Part 7 閱讀測驗", "小考 9, 小考 10 (Review)"], status: [false, false] },
+                { w: "18", d: "6/22-6/28", tasks: ["6/25 期末考", "Rosetta Stone 截止"], status: [false, false] }
             ]
         };
 
-        let currentData = JSON.parse(localStorage.getItem('my_study_data_v1')) || defaultData;
+        let currentData = JSON.parse(localStorage.getItem('study_data_v2')) || defaultData;
 
         window.renderTables = () => {
             ['jp', 'en'].forEach(type => {
-                const body = document.getElementById(`${type}-body`);
-                body.innerHTML = (currentData[type] || []).map((row, rIdx) => {
+                const container = document.getElementById(`${type}-container`);
+                container.innerHTML = (currentData[type] || []).map((row, rIdx) => {
                     const isAllDone = row.status.length > 0 && row.status.every(s => s === true);
                     return `
-                        <tr class="${isAllDone ? 'row-finished' : ''}">
-                            <td class="pl-6 pt-4 text-xs text-gray-400 font-light" contenteditable="true" onblur="window.updateField('${type}', ${rIdx}, 'w', this.innerText)">${row.w}</td>
-                            <td class="pt-4 text-xs text-gray-500" contenteditable="true" onblur="window.updateField('${type}', ${rIdx}, 'd', this.innerText)">${row.d}</td>
-                            <td class="pt-4 pr-6">
+                        <div class="week-block ${isAllDone ? 'row-finished' : ''}">
+                            <div class="week-header">
+                                <span class="week-badge" contenteditable="true" onblur="window.updateField('${type}', ${rIdx}, 'w', this.innerText)">第 ${row.w} 週</span>
+                                <span class="date-range" contenteditable="true" onblur="window.updateField('${type}', ${rIdx}, 'd', this.innerText)">${row.d}</span>
+                            </div>
+                            <div class="space-y-1">
                                 ${row.tasks.map((t, tIdx) => `
                                     <div class="task-item-container ${row.status[tIdx] ? 'task-done' : ''}">
                                         <div class="task-checkbox ${row.status[tIdx] ? 'checked' : ''}" onclick="window.toggleTask('${type}', ${rIdx}, ${tIdx})"></div>
-                                        <div class="task-text text-sm" contenteditable="true" onblur="window.updateTaskText('${type}', ${rIdx}, ${tIdx}, this.innerText)">${t}</div>
-                                        <button onclick="window.removeTask('${type}', ${rIdx}, ${tIdx})" class="opacity-0 hover:opacity-100 text-[10px] text-red-300 ml-auto">✕</button>
+                                        <div class="task-text" contenteditable="true" onblur="window.updateTaskText('${type}', ${rIdx}, ${tIdx}, this.innerText)">${t}</div>
+                                        <button onclick="window.removeTask('${type}', ${rIdx}, ${tIdx})" class="text-xs text-red-200 ml-2">✕</button>
                                     </div>
                                 `).join('')}
-                                <div class="btn-add mt-2 mb-4" onclick="window.addTask('${type}', ${rIdx})">+ 新增項目</div>
-                            </td>
-                        </tr>
+                                <div class="btn-add opacity-50 text-[10px]" onclick="window.addTask('${type}', ${rIdx})">+ 新增項目</div>
+                            </div>
+                        </div>
                     `;
                 }).join('');
             });
@@ -169,45 +192,55 @@
         window.toggleTask = (type, rIdx, tIdx) => {
             currentData[type][rIdx].status[tIdx] = !currentData[type][rIdx].status[tIdx];
             window.renderTables();
+            window.saveToLocal();
         };
 
         window.addTask = (type, rIdx) => {
             currentData[type][rIdx].tasks.push("新項目");
             currentData[type][rIdx].status.push(false);
             window.renderTables();
+            window.saveToLocal();
         };
 
         window.removeTask = (type, rIdx, tIdx) => {
             currentData[type][rIdx].tasks.splice(tIdx, 1);
             currentData[type][rIdx].status.splice(tIdx, 1);
             window.renderTables();
+            window.saveToLocal();
         };
 
         window.addRow = (type) => {
-            const newRow = { w: "?", d: "月/日", tasks: ["新週次項目"], status: [false] };
+            const newRow = { w: "?", d: "月/日", tasks: ["新任務"], status: [false] };
             currentData[type].push(newRow);
             window.renderTables();
+            window.saveToLocal();
         };
 
         window.updateField = (type, rIdx, field, val) => {
-            currentData[type][rIdx][field] = val;
+            currentData[type][rIdx][field] = val.replace('第 ', '').replace(' 週', '');
+            window.saveToLocal();
         };
 
         window.updateTaskText = (type, rIdx, tIdx, val) => {
             currentData[type][rIdx].tasks[tIdx] = val;
+            window.saveToLocal();
+        };
+
+        window.saveToLocal = () => {
+            localStorage.setItem('study_data_v2', JSON.stringify(currentData));
         };
 
         window.saveAll = () => {
-            localStorage.setItem('my_study_data_v1', JSON.stringify(currentData));
+            window.saveToLocal();
             const msg = document.getElementById('msg');
             msg.style.opacity = '1';
             setTimeout(() => { msg.style.opacity = '0'; }, 2000);
         };
 
         window.resetData = () => {
-            if(confirm('確定要重置嗎？這將清除手機/電腦本地所有內容。')) {
+            if(confirm('確定要重置所有進度嗎？')) {
                 currentData = JSON.parse(JSON.stringify(defaultData));
-                localStorage.removeItem('my_study_data_v1');
+                localStorage.removeItem('study_data_v2');
                 window.renderTables();
                 window.renderCalendar();
             }
@@ -225,7 +258,14 @@
             { date: "2026-02-23", label: "開學" }, { date: "2026-02-27", label: "228補假" }, { date: "2026-02-28", label: "228連假" },
             { date: "2026-04-02", label: "校慶補假" }, { date: "2026-04-03", label: "兒童節" }, { date: "2026-04-04", label: "清明節" },
             { date: "2026-04-06", label: "清明補假" }, { date: "2026-05-01", label: "勞動節" }, { date: "2026-06-19", label: "端午節" },
-            { date: "2026-04-20", label: "期中週", type: "exam" }, { date: "2026-06-22", label: "期末週", type: "exam" }
+            // 期中考試週
+            { date: "2026-04-20", label: "期中週", type: "exam" }, { date: "2026-04-21", label: "期中週", type: "exam" }, 
+            { date: "2026-04-22", label: "期中週", type: "exam" }, { date: "2026-04-23", label: "期中週", type: "exam" }, 
+            { date: "2026-04-24", label: "期中週", type: "exam" },
+            // 期末考試週
+            { date: "2026-06-22", label: "期末週", type: "exam" }, { date: "2026-06-23", label: "期末週", type: "exam" }, 
+            { date: "2026-06-24", label: "期末週", type: "exam" }, { date: "2026-06-25", label: "期末週", type: "exam" }, 
+            { date: "2026-06-26", label: "期末週", type: "exam" }, { date: "2026-06-27", label: "期末週", type: "exam" }
         ];
 
         let viewDate = new Date(2026, 1, 1);
