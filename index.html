@@ -3,121 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>學期進度管理系統</title>
+    <title>李柏毅的學期計畫表</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background-color: #fcfaf7;
-            color: #444;
-            letter-spacing: 0.02em;
-        }
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 1px;
-            background-color: #f0f0f0;
-            border: 1px solid #f0f0f0;
-        }
-        .calendar-day {
-            background-color: #fff;
-            min-height: 95px;
-            padding: 8px;
-            font-size: 0.85rem;
-            transition: background 0.2s;
-            position: relative;
-        }
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fcfaf7; color: #444; letter-spacing: 0.02em; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background-color: #f0f0f0; border: 1px solid #f0f0f0; }
+        .calendar-day { background-color: #fff; min-height: 95px; padding: 8px; font-size: 0.85rem; position: relative; }
         .holiday { background-color: #fff1f1; color: #d64545; }
         .weekend { background-color: #fff8f8; color: #d64545; }
         .exam-day { background-color: #f1f5ff; color: #3b82f6; }
         .empty-day { background-color: #fafafa; }
-        
-        .task-item-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 6px;
-            transition: all 0.3s;
-        }
-        .task-checkbox {
-            width: 16px;
-            height: 16px;
-            border: 1px solid #d1d5db;
-            border-radius: 50%;
-            cursor: pointer;
-            flex-shrink: 0;
-            transition: all 0.2s;
-            position: relative;
-        }
-        .task-checkbox.checked {
-            background-color: #9ca3af;
-            border-color: #9ca3af;
-        }
-        .task-checkbox.checked::after {
-            content: '';
-            position: absolute;
-            left: 5px;
-            top: 2px;
-            width: 4px;
-            height: 8px;
-            border: solid white;
-            border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
-        }
-        .task-text {
-            outline: none;
-            border-bottom: 1px solid transparent;
-            transition: border 0.2s;
-            width: 100%;
-        }
+        .task-item-container { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+        .task-checkbox { width: 16px; height: 16px; border: 1px solid #d1d5db; border-radius: 50%; cursor: pointer; flex-shrink: 0; position: relative; }
+        .task-checkbox.checked { background-color: #9ca3af; border-color: #9ca3af; }
+        .task-checkbox.checked::after { content: ''; position: absolute; left: 5px; top: 2px; width: 4px; height: 8px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+        .task-text { outline: none; border-bottom: 1px solid transparent; width: 100%; }
         .task-text:focus { border-bottom: 1px dashed #3b82f6; }
         .task-done { opacity: 0.3; text-decoration: line-through; }
-        
         .row-finished { background-color: #f9f9f9 !important; opacity: 0.5; filter: grayscale(1); }
-        
         .tab-btn { border-bottom: 2px solid transparent; transition: all 0.3s; padding-bottom: 8px; }
         .tab-active { border-bottom: 2px solid #444; color: #000; font-weight: 500; }
-        
-        table { border-spacing: 0; width: 100%; }
-        th { border-bottom: 1px solid #444; font-weight: 500; padding: 12px; font-size: 0.75rem; color: #999; text-transform: uppercase; letter-spacing: 0.1em; }
+        table { width: 100%; }
+        th { border-bottom: 1px solid #444; font-weight: 500; padding: 12px; font-size: 0.75rem; color: #999; text-transform: uppercase; letter-spacing: 0.1em; text-align: left; }
         td { border-bottom: 1px solid #f0f0f0; padding: 14px 12px; vertical-align: top; }
-        
-        .btn-add {
-            font-size: 0.75rem;
-            color: #aaa;
-            cursor: pointer;
-            transition: color 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .btn-add:hover { color: #3b82f6; }
-
-        /* 工讀表單美化 */
-        .work-slot-card {
-            border-left: 1px solid #e5e7eb;
-            padding-left: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        .time-label {
-            font-size: 0.7rem;
-            color: #9ca3af;
-            font-weight: 300;
-            margin-bottom: 0.25rem;
-            display: block;
-            letter-spacing: 0.1em;
-        }
-        .work-subject {
-            font-size: 0.95rem;
-            color: #4b5563;
-            font-weight: 400;
-        }
-        .work-location {
-            font-size: 0.75rem;
-            color: #9ca3af;
-            margin-right: 0.5rem;
-        }
+        .btn-add { font-size: 0.75rem; color: #aaa; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+        .work-slot-card { border-left: 1px solid #e5e7eb; padding-left: 1rem; margin-bottom: 1.5rem; }
+        .time-label { font-size: 0.7rem; color: #9ca3af; margin-bottom: 0.25rem; display: block; letter-spacing: 0.1em; }
+        .work-subject { font-size: 0.95rem; color: #4b5563; }
+        .work-location { font-size: 0.75rem; color: #9ca3af; margin-right: 0.5rem; }
     </style>
 </head>
 <body class="p-4 md:p-12">
@@ -125,11 +39,11 @@
     <div class="max-w-5xl mx-auto">
         <header class="mb-10 border-b border-gray-200 pb-6 flex justify-between items-end">
             <div>
-                <h1 class="text-2xl font-light tracking-widest text-gray-900">114-2 任務表</h1>
+                <h1 class="text-2xl font-light tracking-widest text-gray-900">李柏毅的學期計畫表</h1>
             </div>
             <div class="flex gap-4">
                 <button onclick="saveAll()" class="text-xs border border-gray-400 px-4 py-1 hover:bg-gray-900 hover:text-white transition">儲存內容</button>
-                <button onclick="resetData()" class="text-xs text-gray-400 hover:text-red-400">重置預設</button>
+                <button onclick="resetData()" class="text-xs text-gray-400 hover:text-red-400">重置</button>
             </div>
         </header>
 
@@ -140,126 +54,43 @@
             <button onclick="switchTab('all')" id="btn-all" class="tab-btn whitespace-nowrap">🗓️ 互動月曆</button>
         </nav>
 
-        <div id="msg" class="fixed top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-4 py-2 rounded opacity-0 transition-opacity pointer-events-none z-50 shadow-lg">已儲存</div>
+        <div id="msg" class="fixed top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-4 py-2 rounded opacity-0 transition-opacity pointer-events-none z-50 shadow-lg">已儲存至本地</div>
 
-        <!-- 日文分頁 -->
         <section id="tab-jp" class="tab-content block">
             <div class="bg-white border border-gray-100 shadow-sm rounded-sm">
                 <table>
-                    <thead>
-                        <tr class="text-left">
-                            <th class="w-16 pl-6">週次</th>
-                            <th class="w-24">日期</th>
-                            <th>予定任務 (點擊文字編輯)</th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th class="w-16 pl-6">週次</th><th class="w-24">日期範圍</th><th>予定任務</th></tr></thead>
                     <tbody id="jp-body"></tbody>
                 </table>
-                <div class="p-4 border-t border-gray-50 bg-gray-50/50">
-                    <button onclick="addRow('jp')" class="btn-add">+ 新增週次</button>
-                </div>
+                <div class="p-4 bg-gray-50/50"><button onclick="addRow('jp')" class="btn-add">+ 新增週次</button></div>
             </div>
         </section>
 
-        <!-- 英文分頁 -->
         <section id="tab-en" class="tab-content hidden">
             <div class="bg-white border border-gray-100 shadow-sm rounded-sm">
                 <table>
-                    <thead>
-                        <tr class="text-left">
-                            <th class="w-16 pl-6">週次</th>
-                            <th>任務與考試 (小考、Voc、EasyTest)</th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th class="w-16 pl-6">週次</th><th class="w-24">日期範圍</th><th>任務與考試</th></tr></thead>
                     <tbody id="en-body"></tbody>
                 </table>
-                <div class="p-4 border-t border-gray-50 bg-gray-50/50">
-                    <button onclick="addRow('en')" class="btn-add">+ 新增週次</button>
-                </div>
+                <div class="p-4 bg-gray-50/50"><button onclick="addRow('en')" class="btn-add">+ 新增週次</button></div>
             </div>
         </section>
 
-        <!-- 工讀分頁 - 重新設計為固定排版 -->
         <section id="tab-work" class="tab-content hidden">
             <div class="bg-white border border-gray-100 shadow-sm rounded-sm p-8 md:p-12">
-                <div class="text-center mb-12">
-                    <h2 class="text-sm tracking-[0.4em] text-gray-400 font-light mb-2 uppercase">Study Assistant Schedule</h2>
-                    <p class="text-xs text-gray-300 tracking-widest italic">114-2 學期 深耕學習輔導獎勵金</p>
-                </div>
-
+                <div class="text-center mb-12"><h2 class="text-sm tracking-[0.4em] text-gray-400 font-light mb-2 uppercase">Study Assistant Schedule</h2></div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                    <!-- 星期一 -->
-                    <div>
-                        <h3 class="text-xs font-bold tracking-widest border-b border-gray-900 pb-2 mb-6">MONDAY <span class="text-[10px] font-normal text-gray-400 ml-1">週一</span></h3>
-                        
-                        <div class="work-slot-card">
-                            <span class="time-label">12:15 - 13:15</span>
-                            <span class="work-subject"><span class="work-location">5108</span>日文②</span>
-                        </div>
-                        
-                        <div class="work-slot-card">
-                            <span class="time-label">17:30 - 18:30</span>
-                            <span class="work-subject"><span class="work-location">5108</span>日文②</span>
-                        </div>
-                        
-                        <div class="work-slot-card">
-                            <span class="time-label">18:35 - 19:35</span>
-                            <span class="work-subject"><span class="work-location">5108</span>日文②</span>
-                        </div>
-                    </div>
-
-                    <!-- 星期三 -->
-                    <div>
-                        <h3 class="text-xs font-bold tracking-widest border-b border-gray-900 pb-2 mb-6">WEDNESDAY <span class="text-[10px] font-normal text-gray-400 ml-1">週三</span></h3>
-                        
-                        <div class="work-slot-card">
-                            <span class="time-label">12:15 - 13:15</span>
-                            <span class="work-subject"><span class="work-location">5108</span>日文②</span>
-                        </div>
-                        
-                        <div class="work-slot-card">
-                            <span class="time-label">17:30 - 18:30</span>
-                            <span class="work-subject"><span class="work-location">5108</span>日文②</span>
-                        </div>
-                        
-                        <div class="work-slot-card">
-                            <span class="time-label">18:35 - 19:35</span>
-                            <span class="work-subject"><span class="work-location">5108</span>日文②</span>
-                        </div>
-                    </div>
-
-                    <!-- 星期四 -->
-                    <div>
-                        <h3 class="text-xs font-bold tracking-widest border-b border-gray-900 pb-2 mb-6 text-indigo-400">THURSDAY <span class="text-[10px] font-normal text-gray-400 ml-1">週四</span></h3>
-                        
-                        <div class="work-slot-card border-indigo-100">
-                            <span class="time-label">12:15 - 13:15</span>
-                            <span class="work-subject"><span class="work-location">5108</span>日文②</span>
-                        </div>
-                        
-                        <div class="text-[10px] text-gray-200 mt-8 italic">
-                            * Fixed Schedule<br>
-                            * 3/2 - 6/30
-                        </div>
-                    </div>
+                    <div><h3 class="text-xs font-bold tracking-widest border-b border-gray-900 pb-2 mb-6">MONDAY</h3><div class="work-slot-card"><span class="time-label">12:15-13:15</span><span class="work-subject"><span class="work-location">5108</span>日文②</span></div><div class="work-slot-card"><span class="time-label">17:30-18:30</span><span class="work-subject"><span class="work-location">5108</span>日文②</span></div><div class="work-slot-card"><span class="time-label">18:35-19:35</span><span class="work-subject"><span class="work-location">5108</span>日文②</span></div></div>
+                    <div><h3 class="text-xs font-bold tracking-widest border-b border-gray-900 pb-2 mb-6">WEDNESDAY</h3><div class="work-slot-card"><span class="time-label">12:15-13:15</span><span class="work-subject"><span class="work-location">5108</span>日文②</span></div><div class="work-slot-card"><span class="time-label">17:30-18:30</span><span class="work-subject"><span class="work-location">5108</span>日文②</span></div><div class="work-slot-card"><span class="time-label">18:35-19:35</span><span class="work-subject"><span class="work-location">5108</span>日文②</span></div></div>
+                    <div><h3 class="text-xs font-bold tracking-widest border-b border-gray-900 pb-2 mb-6 text-indigo-400">THURSDAY</h3><div class="work-slot-card border-indigo-100"><span class="time-label">12:15-13:15</span><span class="work-subject"><span class="work-location">5108</span>日文②</span></div></div>
                 </div>
             </div>
         </section>
 
-        <!-- 月曆分頁 -->
         <section id="tab-all" class="tab-content hidden">
             <div class="bg-white border border-gray-100 shadow-sm p-8 rounded-sm">
-                <div class="flex items-center justify-between mb-8">
-                    <button onclick="changeMonth(-1)" class="text-gray-400 hover:text-black">← PREV</button>
-                    <h2 id="calendar-title" class="text-xl font-light tracking-[0.3em]"></h2>
-                    <button onclick="changeMonth(1)" class="text-gray-400 hover:text-black">NEXT →</button>
-                </div>
+                <div class="flex items-center justify-between mb-8"><button onclick="changeMonth(-1)" class="text-gray-400">← PREV</button><h2 id="calendar-title" class="text-xl font-light tracking-[0.3em]"></h2><button onclick="changeMonth(1)" class="text-gray-400">NEXT →</button></div>
                 <div class="calendar-grid" id="calendar-grid"></div>
-                <div class="mt-8 grid grid-cols-2 md:grid-cols-3 gap-4 text-[9px] text-gray-400 uppercase tracking-widest border-t pt-4">
-                    <div class="flex items-center gap-2"><span class="w-2 h-2 bg-red-100 rounded-full"></span> 國定假日/週末</div>
-                    <div class="flex items-center gap-2"><span class="w-2 h-2 bg-blue-100 rounded-full"></span> 考試週</div>
-                    <div class="flex items-center gap-2 italic">※ 月曆僅顯示假期與考試資訊</div>
-                </div>
             </div>
         </section>
     </div>
@@ -267,214 +98,166 @@
     <script>
         const defaultData = {
             jp: [
-                { w: "1", d: "2/25-26", tasks: ["冬休み宿題 発表", "エッセイ 01"], status: [false, false] },
-                { w: "2", d: "3/04-05", tasks: ["PHPのエッセイ(日本人價值觀)", "エッセイ 02"], status: [false, false] },
-                { w: "3", d: "3/11-12", tasks: ["模擬訪談 pivot 01", "小測試エッセイ 01-02"], status: [false, false] },
-                { w: "4", d: "3/18-19", tasks: ["數據閱讀 01 (GDP/新NISA/Mobility)"], status: [false] },
-                { w: "5", d: "3/25-26", tasks: ["數據閱讀 02 (皇室/就職)"], status: [false] },
-                { w: "6", d: "4/01-02", tasks: ["4/1 調課", "4/2 休假"], status: [false, false] },
-                { w: "7", d: "4/08-09", tasks: ["模擬訪談 pivot 02"], status: [false] },
-                { w: "8", d: "4/15-16", tasks: ["數據閱讀 03 (價值觀/生活)"], status: [false] },
-                { w: "9", d: "4/22-23", tasks: ["期中考週：數據閱讀 04 (戰後80年)"], status: [false] },
-                { w: "10", d: "4/29-30", tasks: ["模擬討論會 01"], status: [false] },
-                { w: "11", d: "5/06-07", tasks: ["模擬討論會 02"], status: [false] },
-                { w: "12", d: "5/13-14", tasks: ["模擬討論會 03"], status: [false] },
-                { w: "13", d: "5/20-21", tasks: ["行動經濟學 01 (予定)"], status: [false] },
-                { w: "14", d: "5/27-28", tasks: ["行動經濟學 02 (予定)"], status: [false] },
-                { w: "15", d: "6/03-04", tasks: ["行動經濟學 03 (予定)"], status: [false] },
-                { w: "16", d: "6/10-11", tasks: ["行動經濟學 04 (予定)"], status: [false] },
-                { w: "17", d: "6/17-18", tasks: ["校外教學成果發表 (3組)"], status: [false] },
-                { w: "18", d: "6/24-25", tasks: ["期末：自主學習發表"], status: [false] }
+                { w: "1", d: "2/23-3/01", tasks: ["冬休み宿題 発表", "エッセイ 01"], status: [false, false] },
+                { w: "2", d: "3/02-3/08", tasks: ["PHPのエッセイ(日本人價值觀)", "エッセイ 02"], status: [false, false] },
+                { w: "3", d: "3/09-3/15", tasks: ["模擬訪談 pivot 01", "小測試エッセイ 01-02"], status: [false, false] },
+                { w: "4", d: "3/16-3/22", tasks: ["數據閱讀 01 (GDP/新NISA/Mobility)"], status: [false] },
+                { w: "5", d: "3/23-3/29", tasks: ["數據閱讀 02 (皇室/就職)"], status: [false] },
+                { w: "6", d: "3/30-4/05", tasks: ["4/1 調課", "4/2 休假"], status: [false, false] },
+                { w: "7", d: "4/06-4/12", tasks: ["模擬訪談 pivot 02"], status: [false] },
+                { w: "8", d: "4/13-4/19", tasks: ["數據閱讀 03 (價值觀/生活)"], status: [false] },
+                { w: "9", d: "4/20-4/26", tasks: ["期中考週：數據閱讀 04 (戰後80年)"], status: [false] },
+                { w: "10", d: "4/27-5/03", tasks: ["模擬討論會 01"], status: [false] },
+                { w: "11", d: "5/04-5/10", tasks: ["模擬討論會 02"], status: [false] },
+                { w: "12", d: "5/11-5/17", tasks: ["模擬討論會 03"], status: [false] },
+                { w: "13", d: "5/18-5/24", tasks: ["行動經濟學 01 (予定)"], status: [false] },
+                { w: "14", d: "5/25-5/31", tasks: ["行動經濟學 02 (予定)"], status: [false] },
+                { w: "15", d: "6/01-6/07", tasks: ["行動經濟學 03 (予定)"], status: [false] },
+                { w: "16", d: "6/08-6/14", tasks: ["行動經濟學 04 (予定)"], status: [false] },
+                { w: "17", d: "6/15-6/21", tasks: ["校外教學成果發表 (3組)"], status: [false] },
+                { w: "18", d: "6/22-6/28", tasks: ["期末：自主學習發表"], status: [false] }
             ],
             en: [
-                { w: "1", tasks: ["2/26 Course introduction"], status: [false] },
-                { w: "2", tasks: ["3/05 Part 1 照片描述"], status: [false] },
-                { w: "3", tasks: ["3/12 Part 1 照片描述", "Voc 1. 一般商務 (1%)"], status: [false, false] },
-                { w: "4", tasks: ["3/19 Part 2 應答問題", "課堂小考 1 (Part 1)", "EasyTest 第 30 回 (2%)"], status: [false, false, false] },
-                { w: "5", tasks: ["3/26 Part 3 簡短對話", "課堂小考 2 (Part 2)", "Voc 2. 人資管理 (1%)"], status: [false, false, false] },
-                { w: "6", tasks: ["4/02 校慶補假", "EasyTest 第 31 回 (2%)"], status: [false, false] },
-                { w: "7", tasks: ["4/09 Part 3 簡短對話", "Voc 3. 辦公室&科技 (1%)"], status: [false, false] },
-                { w: "8", tasks: ["4/16 Part 4 簡短獨白", "課堂小考 3 (Part 3)"], status: [false, false] },
-                { w: "9", tasks: ["4/23 期中考週"], status: [false] },
-                { w: "10", tasks: ["4/30 Part 5 單句填空", "課堂小考 4 (Part 4)", "EasyTest 第 32 回 (2%)"], status: [false, false, false] },
-                { w: "11", tasks: ["5/07 Part 5 單句填空", "小考 5 (P1~4 Review)", "Voc 4. 製造&行銷 (1%)"], status: [false, false, false] },
-                { w: "12", tasks: ["5/14 Part 5 單句填空", "EasyTest 第 33 回 (2%)"], status: [false, false] },
-                { w: "13", tasks: ["5/21 Part 6 短文填空", "課堂小考 6 (Part 5)", "Voc 5. 銀行&財務 (1%)"], status: [false, false, false] },
-                { w: "14", tasks: ["5/28 Part 6 短文填空", "EasyTest 第 34 回 (2%)"], status: [false, false] },
-                { w: "15", tasks: ["6/04 Part 7 閱讀測驗", "課堂小考 7 (Part 6)"], status: [false, false] },
-                { w: "16", tasks: ["6/11 Part 7 閱讀測驗", "課堂小考 8 (Part 7)"], status: [false, false] },
-                { w: "17", tasks: ["6/18 Part 7 閱讀測驗", "小考 9(P7), 小考 10(P5~7 Review)"], status: [false, false] },
-                { w: "18", tasks: ["6/25 期末考", "Rosetta Stone 加分項目截止"], status: [false, false] }
+                { w: "1", d: "2/23-3/01", tasks: ["2/26 Course introduction"], status: [false] },
+                { w: "2", d: "3/02-3/08", tasks: ["3/05 Part 1 照片描述"], status: [false] },
+                { w: "3", d: "3/09-3/15", tasks: ["3/12 Part 1 照片描述", "Voc 1. 一般商務 (1%)"], status: [false, false] },
+                { w: "4", d: "3/16-3/22", tasks: ["3/19 Part 2 應答問題", "課堂小考 1 (Part 1)", "EasyTest 第 30 回 (2%)"], status: [false, false, false] },
+                { w: "5", d: "3/23-3/29", tasks: ["3/26 Part 3 簡短對話", "課堂小考 2 (Part 2)", "Voc 2. 人資管理 (1%)"], status: [false, false, false] },
+                { w: "6", d: "3/30-4/05", tasks: ["4/02 校慶補假", "EasyTest 第 31 回 (2%)"], status: [false, false] },
+                { w: "7", d: "4/06-4/12", tasks: ["4/09 Part 3 簡短對話", "Voc 3. 辦公室&科技 (1%)"], status: [false, false] },
+                { w: "8", d: "4/13-4/19", tasks: ["4/16 Part 4 簡短獨白", "課堂小考 3 (Part 3)"], status: [false, false] },
+                { w: "9", d: "4/20-4/26", tasks: ["4/23 期中考週"], status: [false] },
+                { w: "10", d: "4/27-5/03", tasks: ["4/30 Part 5 單句填空", "課堂小考 4 (Part 4)", "EasyTest 第 32 回 (2%)"], status: [false, false, false] },
+                { w: "11", d: "5/04-5/10", tasks: ["5/07 Part 5 單句填空", "小考 5 (P1~4 Review)", "Voc 4. 製造&行銷 (1%)"], status: [false, false, false] },
+                { w: "12", d: "5/11-5/17", tasks: ["5/14 Part 5 單句填空", "EasyTest 第 33 回 (2%)"], status: [false, false] },
+                { w: "13", d: "5/18-5/24", tasks: ["5/21 Part 6 短文填空", "課堂小考 6 (Part 5)", "Voc 5. 銀行&財務 (1%)"], status: [false, false, false] },
+                { w: "14", d: "5/25-5/31", tasks: ["5/28 Part 6 短文填空", "EasyTest 第 34 回 (2%)"], status: [false, false] },
+                { w: "15", d: "6/01-6/07", tasks: ["6/04 Part 7 閱讀測驗", "課堂小考 7 (Part 6)"], status: [false, false] },
+                { w: "16", d: "6/08-6/14", tasks: ["6/11 Part 7 閱讀測驗", "課堂小考 8 (Part 7)"], status: [false, false] },
+                { w: "17", d: "6/15-6/21", tasks: ["6/18 Part 7 閱讀測驗", "小考 9(P7), 小考 10(P5~7 Review)"], status: [false, false] },
+                { w: "18", d: "6/22-6/28", tasks: ["6/25 期末考", "Rosetta Stone 加分項目截止"], status: [false, false] }
             ]
         };
 
-        const holidays = [
-            { date: "2026-02-23", label: "開學" },
-            { date: "2026-02-27", label: "228補假" },
-            { date: "2026-02-28", label: "228和平紀念日" },
-            { date: "2026-04-02", label: "校慶補假" },
-            { date: "2026-04-03", label: "兒童節" },
-            { date: "2026-04-04", label: "清明節" },
-            { date: "2026-04-05", label: "清明連假" },
-            { date: "2026-04-06", label: "清明補假" },
-            { date: "2026-05-01", label: "勞動節" },
-            { date: "2026-05-10", label: "母親節" },
-            { date: "2026-06-19", label: "端午節" },
-            { date: "2026-04-20", label: "期中週", type: "exam" },
-            { date: "2026-04-21", label: "期中週", type: "exam" },
-            { date: "2026-04-22", label: "期中週", type: "exam" },
-            { date: "2026-04-23", label: "期中週", type: "exam" },
-            { date: "2026-04-24", label: "期中週", type: "exam" },
-            { date: "2026-06-22", label: "期末週", type: "exam" },
-            { date: "2026-06-23", label: "期末週", type: "exam" },
-            { date: "2026-06-24", label: "期末週", type: "exam" },
-            { date: "2026-06-25", label: "期末週", type: "exam" },
-            { date: "2026-06-26", label: "期末週", type: "exam" }
-        ];
+        let currentData = JSON.parse(localStorage.getItem('my_study_data_v1')) || defaultData;
 
-        let currentData = JSON.parse(localStorage.getItem('study_v7_data')) || defaultData;
-        let viewDate = new Date(2026, 1, 1);
-
-        function renderTables() {
+        window.renderTables = () => {
             ['jp', 'en'].forEach(type => {
                 const body = document.getElementById(`${type}-body`);
                 body.innerHTML = (currentData[type] || []).map((row, rIdx) => {
                     const isAllDone = row.status.length > 0 && row.status.every(s => s === true);
                     return `
                         <tr class="${isAllDone ? 'row-finished' : ''}">
-                            <td class="pl-6 pt-4 text-xs text-gray-400 font-light" contenteditable="true" onblur="updateField('${type}', ${rIdx}, 'w', this.innerText)">${row.w}</td>
-                            ${type === 'jp' ? `<td class="pt-4 text-xs text-gray-500" contenteditable="true" onblur="updateField('${type}', ${rIdx}, 'd', this.innerText)">${row.d}</td>` : ''}
+                            <td class="pl-6 pt-4 text-xs text-gray-400 font-light" contenteditable="true" onblur="window.updateField('${type}', ${rIdx}, 'w', this.innerText)">${row.w}</td>
+                            <td class="pt-4 text-xs text-gray-500" contenteditable="true" onblur="window.updateField('${type}', ${rIdx}, 'd', this.innerText)">${row.d}</td>
                             <td class="pt-4 pr-6">
                                 ${row.tasks.map((t, tIdx) => `
                                     <div class="task-item-container ${row.status[tIdx] ? 'task-done' : ''}">
-                                        <div class="task-checkbox ${row.status[tIdx] ? 'checked' : ''}" onclick="toggleTask('${type}', ${rIdx}, ${tIdx})"></div>
-                                        <div class="task-text text-sm" contenteditable="true" onblur="updateTaskText('${type}', ${rIdx}, ${tIdx}, this.innerText)">${t}</div>
-                                        <button onclick="removeTask('${type}', ${rIdx}, ${tIdx})" class="opacity-0 hover:opacity-100 text-[10px] text-red-300 ml-auto">✕</button>
+                                        <div class="task-checkbox ${row.status[tIdx] ? 'checked' : ''}" onclick="window.toggleTask('${type}', ${rIdx}, ${tIdx})"></div>
+                                        <div class="task-text text-sm" contenteditable="true" onblur="window.updateTaskText('${type}', ${rIdx}, ${tIdx}, this.innerText)">${t}</div>
+                                        <button onclick="window.removeTask('${type}', ${rIdx}, ${tIdx})" class="opacity-0 hover:opacity-100 text-[10px] text-red-300 ml-auto">✕</button>
                                     </div>
                                 `).join('')}
-                                <div class="btn-add mt-2 mb-4" onclick="addTask('${type}', ${rIdx})">+ 新增項目</div>
+                                <div class="btn-add mt-2 mb-4" onclick="window.addTask('${type}', ${rIdx})">+ 新增項目</div>
                             </td>
                         </tr>
                     `;
                 }).join('');
             });
-        }
+        };
 
-        function toggleTask(type, rIdx, tIdx) {
+        window.toggleTask = (type, rIdx, tIdx) => {
             currentData[type][rIdx].status[tIdx] = !currentData[type][rIdx].status[tIdx];
-            renderTables();
-            autoSave();
-        }
+            window.renderTables();
+        };
 
-        function addTask(type, rIdx) {
+        window.addTask = (type, rIdx) => {
             currentData[type][rIdx].tasks.push("新項目");
             currentData[type][rIdx].status.push(false);
-            renderTables();
-            autoSave();
-        }
+            window.renderTables();
+        };
 
-        function removeTask(type, rIdx, tIdx) {
+        window.removeTask = (type, rIdx, tIdx) => {
             currentData[type][rIdx].tasks.splice(tIdx, 1);
             currentData[type][rIdx].status.splice(tIdx, 1);
-            renderTables();
-            autoSave();
-        }
+            window.renderTables();
+        };
 
-        function addRow(type) {
-            const newRow = { w: "?", tasks: ["新週次項目"], status: [false] };
-            if(type === 'jp') newRow.d = "月/日";
+        window.addRow = (type) => {
+            const newRow = { w: "?", d: "月/日", tasks: ["新週次項目"], status: [false] };
             currentData[type].push(newRow);
-            renderTables();
-            autoSave();
-        }
+            window.renderTables();
+        };
 
-        function updateField(type, rIdx, field, val) {
+        window.updateField = (type, rIdx, field, val) => {
             currentData[type][rIdx][field] = val;
-            autoSave();
-        }
+        };
 
-        function updateTaskText(type, rIdx, tIdx, val) {
+        window.updateTaskText = (type, rIdx, tIdx, val) => {
             currentData[type][rIdx].tasks[tIdx] = val;
-            autoSave();
-        }
+        };
 
-        function renderCalendar() {
-            const grid = document.getElementById('calendar-grid');
-            const title = document.getElementById('calendar-title');
-            grid.innerHTML = '';
-            
-            const year = viewDate.getFullYear();
-            const month = viewDate.getMonth();
-            const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
-            title.innerText = `${monthNames[month]} ${year}`;
+        window.saveAll = () => {
+            localStorage.setItem('my_study_data_v1', JSON.stringify(currentData));
+            const msg = document.getElementById('msg');
+            msg.style.opacity = '1';
+            setTimeout(() => { msg.style.opacity = '0'; }, 2000);
+        };
 
-            ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].forEach(d => {
-                grid.innerHTML += `<div class="bg-gray-50 text-[10px] p-2 text-center font-bold tracking-widest text-gray-400">${d}</div>`;
-            });
-
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-            for(let i = 0; i < firstDay; i++) {
-                grid.innerHTML += `<div class="calendar-day empty-day"></div>`;
+        window.resetData = () => {
+            if(confirm('確定要重置嗎？這將清除手機/電腦本地所有內容。')) {
+                currentData = JSON.parse(JSON.stringify(defaultData));
+                localStorage.removeItem('my_study_data_v1');
+                window.renderTables();
+                window.renderCalendar();
             }
+        };
 
-            for(let d = 1; d <= daysInMonth; d++) {
-                const date = new Date(year, month, d);
-                const dayOfWeek = date.getDay();
-                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                
-                const holiday = holidays.find(h => h.date === dateStr);
-                let classList = "calendar-day";
-                
-                if (dayOfWeek === 0 || dayOfWeek === 6) classList += " weekend";
-                if (holiday) classList += (holiday.type === 'exam' ? ' exam-day' : ' holiday');
-                
-                grid.innerHTML += `
-                    <div class="${classList}">
-                        <span class="font-medium">${d}</span>
-                        <div class="text-[9px] mt-1 leading-tight opacity-90">${holiday ? holiday.label : ''}</div>
-                    </div>
-                `;
-            }
-        }
-
-        function changeMonth(dir) {
-            viewDate.setMonth(viewDate.getMonth() + dir);
-            renderCalendar();
-        }
-
-        function switchTab(tab) {
+        window.switchTab = (tab) => {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById('tab-' + tab).classList.remove('hidden');
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('tab-active'));
             document.getElementById('btn-' + tab).classList.add('tab-active');
-            if(tab === 'all') renderCalendar();
-        }
+            if(tab === 'all') window.renderCalendar();
+        };
 
-        function autoSave() {
-            localStorage.setItem('study_v7_data', JSON.stringify(currentData));
-        }
+        const holidays = [
+            { date: "2026-02-23", label: "開學" }, { date: "2026-02-27", label: "228補假" }, { date: "2026-02-28", label: "228連假" },
+            { date: "2026-04-02", label: "校慶補假" }, { date: "2026-04-03", label: "兒童節" }, { date: "2026-04-04", label: "清明節" },
+            { date: "2026-04-06", label: "清明補假" }, { date: "2026-05-01", label: "勞動節" }, { date: "2026-06-19", label: "端午節" },
+            { date: "2026-04-20", label: "期中週", type: "exam" }, { date: "2026-06-22", label: "期末週", type: "exam" }
+        ];
 
-        function saveAll() {
-            autoSave();
-            const msg = document.getElementById('msg');
-            msg.style.opacity = '1';
-            setTimeout(() => { msg.style.opacity = '0'; }, 2000);
-        }
-
-        function resetData() {
-            if(confirm('確定要重置嗎？這將清除所有自訂內容。')) {
-                currentData = JSON.parse(JSON.stringify(defaultData));
-                localStorage.removeItem('study_v7_data');
-                renderTables();
-                renderCalendar();
+        let viewDate = new Date(2026, 1, 1);
+        window.renderCalendar = () => {
+            const grid = document.getElementById('calendar-grid');
+            const title = document.getElementById('calendar-title');
+            grid.innerHTML = '';
+            const year = viewDate.getFullYear();
+            const month = viewDate.getMonth();
+            const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY"];
+            title.innerText = `${monthNames[month] || ''} ${year}`;
+            ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].forEach(d => grid.innerHTML += `<div class="bg-gray-50 text-[10px] p-2 text-center font-bold text-gray-400">${d}</div>`);
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            for(let i=0; i<firstDay; i++) grid.innerHTML += `<div class="calendar-day empty-day"></div>`;
+            for(let d=1; d<=daysInMonth; d++) {
+                const date = new Date(year, month, d);
+                const dayOfWeek = date.getDay();
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                const holiday = holidays.find(h => h.date === dateStr);
+                let classList = "calendar-day";
+                if (dayOfWeek === 0 || dayOfWeek === 6) classList += " weekend";
+                if (holiday) classList += (holiday.type === 'exam' ? ' exam-day' : ' holiday');
+                grid.innerHTML += `<div class="${classList}"><span class="font-medium">${d}</span><div class="text-[9px] mt-1 leading-tight opacity-90">${holiday ? holiday.label : ''}</div></div>`;
             }
-        }
+        };
+
+        window.changeMonth = (dir) => { viewDate.setMonth(viewDate.getMonth() + dir); window.renderCalendar(); };
 
         window.onload = () => {
-            renderTables();
-            renderCalendar();
+            window.renderTables();
+            window.renderCalendar();
         };
     </script>
 </body>
