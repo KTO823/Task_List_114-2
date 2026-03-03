@@ -108,88 +108,59 @@
 
         <!-- 課表分頁 -->
         <section id="tab-schedule" class="tab-content hidden">
-            <div class="bg-white border border-gray-100 shadow-sm p-4 rounded-sm overflow-hidden">
+            <div class="bg-white border border-gray-100 shadow-sm p-4 rounded-sm">
                 <div class="text-center mb-6">
                     <h2 class="text-xs tracking-[0.4em] text-gray-400 font-light uppercase">Weekly Timetable</h2>
                 </div>
                 
                 <div class="overflow-x-auto pb-4">
                     <div class="min-w-[750px]">
-                        <div class="grid grid-cols-[70px_repeat(5,1fr)] gap-[1px] mb-[1px]">
-                            <div class="bg-[#fcfaf7] text-gray-300 text-[10px] font-bold flex items-center justify-center py-3">TIME</div>
-                            <div class="bg-[#fcfaf7] text-gray-400 text-[11px] py-3 flex justify-center items-center">週一</div>
-                            <div class="bg-[#fcfaf7] text-gray-400 text-[11px] py-3 flex justify-center items-center">週二</div>
-                            <div class="bg-[#fcfaf7] text-gray-400 text-[11px] py-3 flex justify-center items-center">週三</div>
-                            <div class="bg-[#fcfaf7] text-gray-400 text-[11px] py-3 flex justify-center items-center">週四</div>
-                            <div class="bg-[#fcfaf7] text-gray-400 text-[11px] py-3 flex justify-center items-center">週五</div>
-                        </div>
-        
-                        <div class="grid grid-cols-[70px_repeat(5,1fr)] auto-rows-[60px] gap-[1px] bg-gray-50 border-[1px] border-gray-50 relative">
+                        <div class="grid grid-cols-[70px_repeat(5,1fr)] auto-rows-[60px] gap-[1px] bg-gray-100 border-[1px] border-gray-100">
                             
-                            <div class="bg-white text-[10px] text-gray-300 flex justify-center items-center">08:00</div>
-                            <div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div>
+                            <div class="bg-[#fcfaf7] text-gray-300 text-[10px] font-bold flex items-center justify-center">TIME</div>
+                            <div class="bg-[#fcfaf7] text-gray-400 text-[11px] flex justify-center items-center">週一</div>
+                            <div class="bg-[#fcfaf7] text-gray-400 text-[11px] flex justify-center items-center">週二</div>
+                            <div class="bg-[#fcfaf7] text-gray-400 text-[11px] flex justify-center items-center">週三</div>
+                            <div class="bg-[#fcfaf7] text-gray-400 text-[11px] flex justify-center items-center">週四</div>
+                            <div class="bg-[#fcfaf7] text-gray-400 text-[11px] flex justify-center items-center">週五</div>
         
-                            <div class="bg-white text-[10px] text-gray-300 flex justify-center items-center">09:00</div>
-                            <div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div>
+                            <script>
+                                const hours = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
+                                hours.forEach(h => {
+                                    document.write(`<div class="bg-white text-[10px] text-gray-300 flex justify-center items-center border-b border-gray-50">${h}</div>`);
+                                    for(let i=0; i<5; i++) document.write('<div class="bg-white border-b border-gray-50"></div>');
+                                });
+                            </script>
         
-                            <div class="bg-white text-[10px] text-gray-300 flex justify-center items-center">10:00</div>
-                            <div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div>
-        
-                            <div class="bg-white text-[10px] text-gray-300 flex justify-center items-center">11:00</div>
-                            <div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div>
-        
-                            <div class="bg-white text-[10px] text-gray-300 flex justify-center items-center">12:00</div>
-                            <div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div>
-        
-                            <div class="bg-white text-[10px] text-gray-300 flex justify-center items-center">13:00</div>
-                            <div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div>
-        
-                            <div class="bg-white text-[10px] text-gray-300 flex justify-center items-center">14:00</div>
-                            <div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div>
-        
-                            <div class="bg-white text-[10px] text-gray-300 flex justify-center items-center">15:00</div>
-                            <div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div>
-        
-                            <div class="bg-white text-[10px] text-gray-300 flex justify-center items-center">16:00</div>
-                            <div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div>
-        
-                            <div class="bg-white text-[10px] text-gray-300 flex justify-center items-center">17:00</div>
-                            <div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div>
-        
-                            <div class="bg-white text-[10px] text-gray-300 flex justify-center items-center">18:00</div>
-                            <div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div>
-        
-                            <div class="bg-white text-[10px] text-gray-300 flex justify-center items-center">19:00</div>
-                            <div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div>
-        
-                            <div class="bg-white text-[10px] text-gray-300 flex justify-center items-center">20:00</div>
-                            <div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div>
-        
-                            <div class="course-card bg-jp-amber absolute inset-x-0" style="grid-column: 2; grid-row: 2; height: calc(100% - 2px); margin: 1px;">
+                            <div class="course-card bg-jp-amber flex flex-col items-center justify-center" style="grid-column: 2; grid-row: 3 / span 1;">
                                 <span class="title">職涯規劃</span><span class="loc">3611</span>
                             </div>
-                            <div class="course-card bg-jp-amber absolute inset-x-0" style="grid-column: 2; grid-row: 7 / span 2; height: calc(100% - 2px); margin: 1px;">
+                            <div class="course-card bg-jp-amber flex flex-col items-center justify-center" style="grid-column: 2; grid-row: 7 / span 2;">
                                 <span class="title">電子商務</span><span class="loc">3402</span>
                             </div>
-                            <div class="course-card bg-jp-sky absolute inset-x-0" style="grid-column: 3; grid-row: 3 / span 2; height: calc(100% - 2px); margin: 1px;">
+        
+                            <div class="course-card bg-jp-sky flex flex-col items-center justify-center" style="grid-column: 3; grid-row: 4 / span 2;">
                                 <span class="title">日文企劃書</span><span class="loc">3905</span>
                             </div>
-                            <div class="course-card bg-jp-blue-dark absolute inset-x-0" style="grid-column: 3; grid-row: 7; height: calc(100% - 2px); margin: 1px;">
+                            <div class="course-card bg-jp-blue-dark flex flex-col items-center justify-center" style="grid-column: 3; grid-row: 7 / span 1;">
                                 <span class="title">日語口說</span><span class="loc">3905</span>
                             </div>
-                            <div class="course-card bg-jp-rose absolute inset-x-0" style="grid-column: 4; grid-row: 7; height: calc(100% - 2px); margin: 1px;">
+        
+                            <div class="course-card bg-jp-rose flex flex-col items-center justify-center" style="grid-column: 4; grid-row: 7 / span 1;">
                                 <span class="title">多媒體(聽)</span><span class="loc">3411</span>
                             </div>
-                            <div class="course-card bg-jp-rose absolute inset-x-0" style="grid-column: 5; grid-row: 2 / span 3; height: calc(100% - 2px); margin: 1px;">
+        
+                            <div class="course-card bg-jp-rose flex flex-col items-center justify-center" style="grid-column: 5; grid-row: 3 / span 3;">
                                 <span class="title">多媒體(聽)</span><span class="loc">3401</span>
                             </div>
-                            <div class="course-card bg-jp-orange absolute inset-x-0" style="grid-column: 5; grid-row: 7 / span 2; height: calc(100% - 2px); margin: 1px;">
+                            <div class="course-card bg-jp-orange flex flex-col items-center justify-center" style="grid-column: 5; grid-row: 7 / span 2;">
                                 <span class="title">進階英檢</span><span class="loc">3704</span>
                             </div>
-                            <div class="course-card bg-jp-gray absolute inset-x-0" style="grid-column: 5; grid-row: 9 / span 2; height: calc(100% - 2px); margin: 1px;">
+                            <div class="course-card bg-jp-gray flex flex-col items-center justify-center" style="grid-column: 5; grid-row: 9 / span 2;">
                                 <span class="title text-gray-400 italic">週會 / 班會</span>
                             </div>
-                            <div class="course-card bg-jp-indigo absolute inset-x-0" style="grid-column: 6; grid-row: 10 / span 4; height: calc(100% - 2px); margin: 1px;">
+        
+                            <div class="course-card bg-jp-indigo flex flex-col items-center justify-center" style="grid-column: 6; grid-row: 10 / span 4;">
                                 <span class="title text-indigo-700">情境日語</span><span class="loc text-indigo-400">3902</span>
                             </div>
                         </div>
