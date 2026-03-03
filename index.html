@@ -51,10 +51,10 @@
         /* 日系配色色塊 */
         .bg-jp-amber { background-color: #fffbf0; }
         .bg-jp-green { background-color: #f0f7f4; }
-        .bg-jp-sky { background-color: #f1f5f9; }
+        .bg-jp-sky { background-color: #e0e7ff; }
         .bg-jp-blue-dark { background-color: #3b82f6; }
-        .bg-jp-blue-dark .title { color: #fff !important; }
-        .bg-jp-blue-dark .loc { color: rgba(255,255,255,0.8) !important; }
+        .bg-jp-blue-dark .title { color: #4b5563 !important; }
+        .bg-jp-blue-dark .loc { color: #9ca3af !important; }
         .bg-jp-rose { background-color: #fff1f2; }
         .bg-jp-orange { background-color: #fff7ed; }
         .bg-jp-gray { background-color: #f3f4f6; }
@@ -109,13 +109,13 @@
 
         <!-- 課表分頁 -->
         <section id="tab-schedule" class="tab-content hidden">
-            <div class="bg-white border border-gray-100 shadow-sm p-4 rounded-sm">
+            <div class="bg-white border border-gray-100 shadow-sm p-4 rounded-sm overflow-hidden">
                 <div class="text-center mb-6">
                     <h2 class="text-xs tracking-[0.4em] text-gray-400 font-light uppercase">Weekly Timetable</h2>
                 </div>
                 
                 <div class="overflow-x-auto pb-4">
-                    <div class="min-w-[750px]">
+                    <div class="min-w-[750px] relative">
                         <div class="grid grid-cols-[70px_repeat(5,1fr)] gap-1 mb-1">
                             <div class="bg-[#fcfaf7] text-gray-300 text-[10px] font-bold flex items-center justify-center py-2">TIME</div>
                             <div class="bg-[#fcfaf7] text-gray-400 text-[11px] py-2 flex justify-center items-center">週一</div>
@@ -125,48 +125,61 @@
                             <div class="bg-[#fcfaf7] text-gray-400 text-[11px] py-2 flex justify-center items-center">週五</div>
                         </div>
         
-                        <div class="grid grid-cols-[70px_repeat(5,1fr)] auto-rows-[60px] gap-1 bg-gray-50 border border-gray-50 rounded-sm">
-                            <script>
-                                const times = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
-                                times.forEach((t, index) => {
-                                    // 渲染左側時間標籤
-                                    document.write(`<div class="bg-white text-[10px] text-gray-300 flex justify-center items-center">${t}</div>`);
-                                    // 渲染該時段的 5 個空白背景格
-                                    for(let i=0; i<5; i++) {
-                                        document.write('<div class="bg-white"></div>');
-                                    }
-                                });
-                            </script>
+                        <div class="grid grid-cols-[70px_repeat(5,1fr)] grid-rows-[repeat(13,60px)] gap-1 relative">
+                            
+                            <div class="grid grid-rows-[repeat(13,60px)] gap-1">
+                                <div class="text-[10px] text-gray-300 flex justify-center items-start pt-1">08:00</div>
+                                <div class="text-[10px] text-gray-300 flex justify-center items-start pt-1">09:00</div>
+                                <div class="text-[10px] text-gray-300 flex justify-center items-start pt-1">10:00</div>
+                                <div class="text-[10px] text-gray-300 flex justify-center items-start pt-1">11:00</div>
+                                <div class="text-[10px] text-gray-300 flex justify-center items-start pt-1">12:00</div>
+                                <div class="text-[10px] text-gray-300 flex justify-center items-start pt-1">13:00</div>
+                                <div class="text-[10px] text-gray-300 flex justify-center items-start pt-1">14:00</div>
+                                <div class="text-[10px] text-gray-300 flex justify-center items-start pt-1">15:00</div>
+                                <div class="text-[10px] text-gray-300 flex justify-center items-start pt-1">16:00</div>
+                                <div class="text-[10px] text-gray-300 flex justify-center items-start pt-1">17:00</div>
+                                <div class="text-[10px] text-gray-300 flex justify-center items-start pt-1">18:00</div>
+                                <div class="text-[10px] text-gray-300 flex justify-center items-start pt-1">19:00</div>
+                                <div class="text-[10px] text-gray-300 flex justify-center items-start pt-1">20:00</div>
+                            </div>
         
-                            <div class="course-card bg-jp-amber" style="grid-column: 2; grid-row: 2;">
+                            <div class="col-start-2 col-span-5 row-start-1 row-span-13 grid grid-cols-5 grid-rows-13 gap-1 absolute inset-0 left-[70px] pointer-events-none">
+                                <script>
+                                    for(let i=0; i<65; i++) {
+                                        document.write('<div class="border border-gray-50 rounded-[2px] bg-white"></div>');
+                                    }
+                                </script>
+                            </div>
+        
+                            <div class="course-card bg-jp-amber col-start-2 row-start-2 row-span-1">
                                 <span class="title">職涯規劃</span><span class="loc">3611</span>
                             </div>
-                            <div class="course-card bg-jp-green" style="grid-column: 2; grid-row: 6 / span 2;">
+                            <div class="course-card bg-jp-green col-start-2 row-start-6 row-span-2">
                                 <span class="title">電子商務</span><span class="loc">3402</span>
                             </div>
         
-                            <div class="course-card bg-jp-sky" style="grid-column: 3; grid-row: 3 / span 2;">
+                            <div class="course-card bg-jp-sky col-start-3 row-start-3 row-span-2">
                                 <span class="title">日文企劃書</span><span class="loc">3905</span>
                             </div>
-                            <div class="course-card bg-jp-blue-dark" style="grid-column: 3; grid-row: 6;">
+                            <div class="course-card bg-jp-blue-dark col-start-3 row-start-6 row-span-1">
                                 <span class="title">日語口說</span><span class="loc">3905</span>
                             </div>
         
-                            <div class="course-card bg-jp-rose" style="grid-column: 4; grid-row: 6;">
+                            <div class="course-card bg-jp-rose col-start-4 row-start-6 row-span-1">
                                 <span class="title">多媒體(聽)</span><span class="loc">3411</span>
                             </div>
         
-                            <div class="course-card bg-jp-rose" style="grid-column: 5; grid-row: 2 / span 3;">
+                            <div class="course-card bg-jp-rose col-start-5 row-start-2 row-span-3">
                                 <span class="title">多媒體(聽)</span><span class="loc">3401</span>
                             </div>
-                            <div class="course-card bg-jp-orange" style="grid-column: 5; grid-row: 6 / span 2;">
+                            <div class="course-card bg-jp-orange col-start-5 row-start-6 row-span-2">
                                 <span class="title">進階英檢</span><span class="loc">3704</span>
                             </div>
-                            <div class="course-card bg-jp-gray" style="grid-column: 5; grid-row: 8 / span 2;">
+                            <div class="course-card bg-jp-gray col-start-5 row-start-8 row-span-2">
                                 <span class="title text-gray-400 italic">週會 / 班會</span>
                             </div>
         
-                            <div class="course-card bg-jp-indigo" style="grid-column: 6; grid-row: 9 / span 4;">
+                            <div class="course-card bg-jp-indigo col-start-6 row-start-9 row-span-4">
                                 <span class="title text-indigo-700">情境日語</span><span class="loc text-indigo-400">3902</span>
                             </div>
                         </div>
