@@ -57,6 +57,7 @@
         <nav class="flex gap-6 mb-8 text-sm tracking-widest overflow-x-auto pb-2 scrollbar-hide">
             <button onclick="switchTab('jp')" id="btn-jp" class="tab-btn tab-active whitespace-nowrap">🇯🇵 日文課</button>
             <button onclick="switchTab('en')" id="btn-en" class="tab-btn whitespace-nowrap">🇺🇸 英文課</button>
+            <button onclick="switchTab('schedule')" id="btn-schedule" class="tab-btn whitespace-nowrap">🕒 學期課表</button>
             <button onclick="switchTab('work')" id="btn-work" class="tab-btn whitespace-nowrap">🏫 工讀排班</button>
             <button onclick="switchTab('all')" id="btn-all" class="tab-btn whitespace-nowrap">🗓️ 互動月曆</button>
         </nav>
@@ -77,6 +78,34 @@
                 <!-- 資料將由 JS 生成 -->
             </div>
             <button onclick="addRow('en')" class="btn-add mt-6 w-full justify-center">+ 新增週次</button>
+        </section>
+
+        <!-- 課表分頁 -->
+        <section id="tab-schedule" class="tab-content hidden">
+            <div class="bg-white border border-gray-100 shadow-sm p-6 rounded-sm overflow-x-auto">
+            <div class="text-center mb-6"><h2 class="text-sm tracking-[0.4em] text-gray-400 font-light uppercase">Class Schedule</h2></div>
+            <table class="w-full text-left text-sm border-collapse">
+                <thead>
+                    <tr class="border-b border-gray-900 text-[10px] tracking-widest text-gray-400 uppercase">
+                        <th class="py-3 px-2 font-bold">星期</th>
+                        <th class="py-3 px-2 font-bold">時段</th>
+                        <th class="py-3 px-2 font-bold">課程</th>
+                        <th class="py-3 px-2 font-bold text-right">教室</th>
+                    </tr>
+                </thead>
+                    <tbody class="text-gray-600">
+                        <tr class="border-b border-gray-50"><td class="py-4 px-2">週一</td><td class="py-4 px-2">09:10-10:00</td><td class="py-4 px-2">職涯規劃</td><td class="py-4 px-2 text-right">3611</td></tr>
+                        <tr class="border-b border-gray-50"><td class="py-4 px-2">週一</td><td class="py-4 px-2">13:25-15:10</td><td class="py-4 px-2">電子商務與大數據應用</td><td class="py-4 px-2 text-right">3402</td></tr>
+                        <tr class="border-b border-gray-50 bg-gray-50/30"><td class="py-4 px-2">週二</td><td class="py-4 px-2">10:10-12:00</td><td class="py-4 px-2">日文企劃書撰寫</td><td class="py-4 px-2 text-right">3905</td></tr>
+                        <tr class="border-b border-gray-50 bg-gray-50/30"><td class="py-4 px-2">週二</td><td class="py-4 px-2">13:25-14:15</td><td class="py-4 px-2 font-medium text-blue-500">日語口說加強班</td><td class="py-4 px-2 text-right">3905</td></tr>
+                        <tr class="border-b border-gray-50"><td class="py-4 px-2">週三</td><td class="py-4 px-2">13:25-14:15</td><td class="py-4 px-2">日文多媒體聽閱與分析</td><td class="py-4 px-2 text-right">3411</td></tr>
+                        <tr class="border-b border-gray-50 bg-gray-50/30"><td class="py-4 px-2">週四</td><td class="py-4 px-2">09:10-12:00</td><td class="py-4 px-2">日文多媒體聽閱與分析</td><td class="py-4 px-2 text-right">3401</td></tr>
+                        <tr class="border-b border-gray-50 bg-gray-50/30"><td class="py-4 px-2">週四</td><td class="py-4 px-2">13:25-15:10</td><td class="py-4 px-2 text-orange-600">進階英文檢定輔導</td><td class="py-4 px-2 text-right">3704</td></tr>
+                        <tr class="border-b border-gray-50 bg-gray-50/30"><td class="py-4 px-2">週四</td><td class="py-4 px-2">15:20-17:05</td><td class="py-4 px-2 text-gray-400">週會 / 班會</td><td class="py-4 px-2 text-right">-</td></tr>
+                        <tr class="border-b border-gray-900/10"><td class="py-4 px-2">週五</td><td class="py-4 px-2">16:15-20:00</td><td class="py-4 px-2">高級情境日語 (二)</td><td class="py-4 px-2 text-right">3902</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
 
         <!-- 工讀分頁 -->
@@ -237,6 +266,16 @@
             setTimeout(() => { msg.style.opacity = '0'; }, 2000);
         };
 
+        window.switchTab = (tab) => {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('tab-' + tab).classList.remove('hidden');
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('tab-active'));
+            document.getElementById('btn-' + tab).classList.add('tab-active');
+    
+            // 如果是月曆才重新渲染
+            if(tab === 'all') window.renderCalendar();
+        };
+        
         window.resetData = () => {
             if(confirm('確定要重置所有進度嗎？')) {
                 currentData = JSON.parse(JSON.stringify(defaultData));
