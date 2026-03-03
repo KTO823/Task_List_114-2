@@ -82,69 +82,93 @@
 
         <!-- 課表分頁 -->
         <section id="tab-schedule" class="tab-content hidden">
-            <div class="bg-white border border-gray-100 shadow-sm p-4 rounded-sm">
-                <div class="text-center mb-6"><h2 class="text-sm tracking-[0.4em] text-gray-400 font-light uppercase">Class Schedule</h2></div>
+            <div class="bg-white border border-gray-100 shadow-sm p-4 rounded-sm overflow-hidden">
+                <div class="text-center mb-6">
+                    <h2 class="text-sm tracking-[0.4em] text-gray-400 font-light uppercase">Weekly Timetable</h2>
+                </div>
         
                 <div class="overflow-x-auto pb-4">
-                    <div class="min-w-[600px] grid grid-cols-6 gap-2 text-center">
-                        <div class="bg-gray-50 p-2 text-[10px] font-bold text-gray-400">時段</div>
-                        <div class="bg-gray-50 p-2 text-[10px] font-bold text-gray-400">週一</div>
-                        <div class="bg-gray-50 p-2 text-[10px] font-bold text-gray-400">週二</div>
-                        <div class="bg-gray-50 p-2 text-[10px] font-bold text-gray-400">週三</div>
-                        <div class="bg-gray-50 p-2 text-[10px] font-bold text-gray-400">週四</div>
-                        <div class="bg-gray-50 p-2 text-[10px] font-bold text-gray-400">週五</div>
+                    <div class="min-w-[800px] relative">
+                        <div class="grid grid-cols-[60px_repeat(5,1fr)] gap-1 mb-1">
+                            <div class="text-[10px] font-bold text-gray-300 flex items-center justify-center">TIME</div>
+                            <div class="bg-gray-900 text-white text-[11px] py-2 rounded-t-sm">週一</div>
+                            <div class="bg-gray-900 text-white text-[11px] py-2 rounded-t-sm">週二</div>
+                            <div class="bg-gray-900 text-white text-[11px] py-2 rounded-t-sm">週三</div>
+                            <div class="bg-gray-900 text-white text-[11px] py-2 rounded-t-sm">週四</div>
+                            <div class="bg-gray-900 text-white text-[11px] py-2 rounded-t-sm">週五</div>
+                        </div>
 
-                        <div class="text-[10px] self-center text-gray-400">上午</div>
-                        <div class="schedule-cell bg-blue-50 border border-blue-100 p-2 rounded">
-                            <div class="text-[11px] font-bold">職涯規劃</div>
-                            <div class="text-[9px] opacity-70">09:10-10:00 (3611)</div>
-                        </div>
-                        <div class="schedule-cell bg-gray-50 border border-gray-100 p-2 rounded">
-                            <div class="text-[11px] font-bold">日文企劃書撰寫</div>
-                            <div class="text-[9px] opacity-70">10:10-12:00 (3905)</div>
-                        </div>
-                        <div class="bg-transparent"></div> <div class="schedule-cell bg-gray-50 border border-gray-100 p-2 rounded">
-                            <div class="text-[11px] font-bold">日文多媒體</div>
-                            <div class="text-[9px] opacity-70">09:10-12:00 (3401)</div>
-                        </div>
-                        <div class="bg-transparent"></div> <div class="text-[10px] self-center text-gray-400">下午</div>
-                        <div class="schedule-cell bg-gray-50 border border-gray-100 p-2 rounded">
-                            <div class="text-[11px] font-bold">電子商務</div>
-                            <div class="text-[9px] opacity-70">13:25-15:10 (3402)</div>
-                        </div>
-                        <div class="schedule-cell bg-blue-100 border border-blue-200 p-2 rounded">
-                            <div class="text-[11px] font-bold text-blue-700">口說加強班</div>
-                            <div class="text-[9px] opacity-70 text-blue-600">13:25-14:15 (3905)</div>
-                        </div>
-                        <div class="schedule-cell bg-gray-50 border border-gray-100 p-2 rounded">
-                            <div class="text-[11px] font-bold">日文多媒體</div>
-                            <div class="text-[9px] opacity-70">13:25-14:15 (3411)</div>
-                        </div>
-                        <div class="schedule-cell bg-orange-50 border border-orange-100 p-2 rounded">
-                            <div class="text-[11px] font-bold text-orange-700">英檢輔導</div>
-                            <div class="text-[9px] opacity-70 text-orange-600">13:25-15:10 (3704)</div>
-                        </div>
-                        <div class="bg-transparent"></div> <div class="text-[10px] self-center text-gray-400">傍晚</div>
-                        <div class="bg-transparent"></div>
-                        <div class="bg-transparent"></div>
-                        <div class="bg-transparent"></div>
-                        <div class="schedule-cell bg-gray-50 border border-gray-100 p-2 rounded italic text-gray-400">
-                            <div class="text-[11px]">週會 / 班會</div>
-                            <div class="text-[9px]">15:20-17:05</div>
-                        </div>
-                        <div class="schedule-cell bg-indigo-50 border border-indigo-100 p-2 rounded">
-                            <div class="text-[11px] font-bold text-indigo-700">高級情境日語</div>
-                            <div class="text-[9px] opacity-70 text-indigo-600">16:15-20:00 (3902)</div>
+                        <div class="grid grid-cols-[60px_repeat(5,1fr)] grid-rows-[repeat(13,50px)] gap-1">
+                            <div class="text-[10px] text-gray-400 flex items-start justify-center pt-1 border-r border-gray-50">08:00</div>
+                            <div class="text-[10px] text-gray-400 flex items-start justify-center pt-1 border-r border-gray-50">09:00</div>
+                            <div class="text-[10px] text-gray-400 flex items-start justify-center pt-1 border-r border-gray-50">10:00</div>
+                            <div class="text-[10px] text-gray-400 flex items-start justify-center pt-1 border-r border-gray-50">11:00</div>
+                            <div class="text-[10px] text-gray-400 flex items-start justify-center pt-1 border-r border-gray-50">12:00</div>
+                            <div class="text-[10px] text-gray-400 flex items-start justify-center pt-1 border-r border-gray-50">13:00</div>
+                            <div class="text-[10px] text-gray-400 flex items-start justify-center pt-1 border-r border-gray-50">14:00</div>
+                            <div class="text-[10px] text-gray-400 flex items-start justify-center pt-1 border-r border-gray-50">15:00</div>
+                            <div class="text-[10px] text-gray-400 flex items-start justify-center pt-1 border-r border-gray-50">16:00</div>
+                            <div class="text-[10px] text-gray-400 flex items-start justify-center pt-1 border-r border-gray-50">17:00</div>
+                            <div class="text-[10px] text-gray-400 flex items-start justify-center pt-1 border-r border-gray-50">18:00</div>
+                            <div class="text-[10px] text-gray-400 flex items-start justify-center pt-1 border-r border-gray-50">19:00</div>
+                            <div class="text-[10px] text-gray-400 flex items-start justify-center pt-1 border-r border-gray-50">20:00</div>
+
+                            <div class="col-start-2 col-span-5 row-start-1 row-span-13 grid grid-cols-5 grid-rows-13 gap-1 absolute inset-0 left-[60px] pointer-events-none">
+                                <script>
+                                    for(let i=0; i<65; i++) document.write('<div class="border border-gray-50/50 rounded-[2px]"></div>');
+                                </script>
+                            </div>
+
+                            <div class="course-card bg-emerald-50 border-l-4 border-emerald-400 col-start-2 row-start-2" style="grid-row-end: span 1;">
+                                <span class="title">職涯規劃</span><span class="loc">3611</span>
+                            </div>
+                            <div class="course-card bg-amber-50 border-l-4 border-amber-400 col-start-2 row-start-6" style="grid-row-end: span 2;">
+                                <span class="title">電子商務</span><span class="loc">3402</span>
+                            </div>
+
+                            <div class="course-card bg-sky-50 border-l-4 border-sky-400 col-start-3 row-start-3" style="grid-row-end: span 2;">
+                                <span class="title">日文企劃書</span><span class="loc">3905</span>
+                            </div>
+                            <div class="course-card bg-blue-500 border-l-4 border-blue-700 text-white col-start-3 row-start-6" style="grid-row-end: span 1;">
+                                <span class="title !text-white">日語口說</span><span class="loc">3905</span>
+                            </div>
+
+                            <div class="course-card bg-rose-50 border-l-4 border-rose-400 col-start-4 row-start-6" style="grid-row-end: span 1;">
+                                <span class="title">多媒體(聽)</span><span class="loc">3411</span>
+                            </div>
+
+                            <div class="course-card bg-rose-50 border-l-4 border-rose-400 col-start-5 row-start-2" style="grid-row-end: span 3;">
+                                <span class="title">多媒體(聽)</span><span class="loc">3401</span>
+                            </div>
+                            <div class="course-card bg-orange-50 border-l-4 border-orange-400 col-start-5 row-start-6" style="grid-row-end: span 2;">
+                                <span class="title">進階英檢</span><span class="loc">3704</span>
+                            </div>
+                            <div class="course-card bg-gray-100 border-l-4 border-gray-300 col-start-5 row-start-8" style="grid-row-end: span 2;">
+                                <span class="title text-gray-400 italic">週會 / 班會</span>
+                            </div>
+
+                            <div class="course-card bg-indigo-50 border-l-4 border-indigo-400 col-start-6 row-start-9" style="grid-row-end: span 4;">
+                                <span class="title text-indigo-700">情境日語</span><span class="loc text-indigo-400">3902</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <style>
-        .schedule-cell { transition: transform 0.2s; min-height: 60px; display: flex; flex-direction: column; justify-content: center; }
-        .schedule-cell:active { transform: scale(0.98); }
-    </style>
+<style>
+    .course-card {
+        padding: 6px;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        z-index: 10;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .course-card .title { font-size: 11px; font-weight: 700; color: #374151; line-height: 1.2; }
+    .course-card .loc { font-size: 9px; color: #9ca3af; margin-top: 2px; }
+</style>
 
         <!-- 工讀分頁 -->
         <section id="tab-work" class="tab-content hidden">
